@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "BC"
+version = "0.1.0"
+dependencies = []  # Add dependencies here if needed
+
+[project.optional-dependencies]
+torch-gpu = [
+    "torch==2.6.0+cu118",
+    "torchvision==0.21.0+cu118",
+    "torchaudio==2.6.0+cu118"
+]
