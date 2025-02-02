@@ -1,0 +1,3 @@
+## RL
+
+This repository is based on [CS285](https://github.com/berkeleydeeprlcourse/homework_fall2023) from Berkeley, an excellent starting point for reinforcement learning. While their implementation provides a solid framework for developing and testing RL algorithms, it is somewhat outdated. To address this, I have introduced several fixes and improvements to enhance compatibility and usability. Additionally, this repo serves as a foundation for experimenting with other RL methods and extending the existing framework.
