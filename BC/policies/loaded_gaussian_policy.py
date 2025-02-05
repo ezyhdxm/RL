@@ -1,5 +1,5 @@
 import numpy as np
-from BC.infrastructure import pytorch_util as ptu
+from infrastructure import pytorch_util as ptu
 from .base_policies import BasePolicy
 from torch import nn
 import torch

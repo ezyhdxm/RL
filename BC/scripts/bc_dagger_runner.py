@@ -5,12 +5,13 @@ import gymnasium as gym
 import numpy as np
 import torch
 
-from BC.infrastructure.logger import Logger
-from BC.infrastructure.replay_buffer import ReplayBuffer
+from infrastructure.logger import Logger
+from infrastructure.replay_buffer import ReplayBuffer
+from infrastructure import pytorch_util as ptu
+from infrastructure import sample_utils
 from BC.policies.MLP_policy import MLPPolicySL
 from BC.policies.loaded_gaussian_policy import LoadedGaussianPolicy
-from BC.infrastructure import pytorch_util as ptu
-from BC.infrastructure import sample_utils
+
 
 MAX_NVIDEO = 2
 MAX_VIDEO_LEN = 40

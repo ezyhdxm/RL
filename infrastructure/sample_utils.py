@@ -1,8 +1,8 @@
 from collections import OrderedDict
 import cv2
 import numpy as np
-import time
-from BC.infrastructure import pytorch_util as ptu
+from infrastructure import pytorch_util as ptu
+import gymnasium as gym
 
 def sample_trajectory(env, policy, max_path_length, render=False):
     """

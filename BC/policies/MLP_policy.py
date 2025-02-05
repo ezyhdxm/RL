@@ -7,30 +7,11 @@ from torch import optim
 import torch
 import numpy as np
 from torch import distributions
-from BC.infrastructure import pytorch_util as ptu
+from infrastructure import pytorch_util as ptu
+from infrastructure.pytorch_util import MLP
 from BC.policies.base_policies import BasePolicy
 
-class MLP(nn.Module):
-    def __init__(self, input_size:int, output_size:int, n_layers:int, hidden_size:int, activation=nn.ReLU):
-        super().__init__()
-        self.input_size = input_size
-        self.output_size = output_size
-        self.hidden_size = hidden_size
-        self.activation = activation
-        self.layers = nn.ModuleList()
-        in_size = input_size
-        for _ in range(n_layers):
-            self.layers.append(nn.Linear(in_size, hidden_size))
-            self.layers.append(activation())
-            in_size = hidden_size
-        
-        self.layers.append(nn.Linear(in_size, output_size))
 
-    def forward(self, x):
-        for layer in self.layers:
-            x = layer(x)
-        return x
-    
 class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
     def __init__(self, obs_dim, ac_dim, n_layers, size, learning_rate=1e-4, training=True, nn_baseline=False, **kwargs):
         super().__init__(**kwargs)
