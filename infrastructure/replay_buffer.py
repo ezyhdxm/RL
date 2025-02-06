@@ -1,4 +1,4 @@
-from BC.infrastructure.sample_utils import *
+from infrastructure.sample_utils import *
 import numpy as np
 
 

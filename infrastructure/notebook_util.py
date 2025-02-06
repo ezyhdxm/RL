@@ -23,5 +23,5 @@ def show_video(env):
         print("Could not find video")
 
 def wrap_env(env):
-    env = RecordVideo(env, video_folder='video', name_prefix=f"{env.spec.id}")
+    env = RecordVideo(env, video_folder='video', name_prefix=f"{env.spec.id}", fps=30)
     return env
