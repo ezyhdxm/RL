@@ -81,31 +81,21 @@ class MLPPolicyPG(MLPPolicy):
                 distribution_detached = torch.distributions.MultivariateNormal(detached_loc, detached_covariance_matrix)
             probs = torch.exp(distribution.log_prob(actions))
             loss = surrogate_loss(probs, probs.detach(), advantages).mean()
-            #kl_reg = KL(distribution, distribution)
-            #params = list(self.parameters)
             if self.discrete:
                 params = list(self.logits_net.parameters())
             else:
                 params = list(itertools.chain([self.logstd], self.mean_net.parameters()))
             grad_loss = torch.autograd.grad(loss, params, retain_graph=True)
             grad_loss = torch.cat([grad.view(-1) for grad in grad_loss])
-            #grad_kl = flat_grad(kl_reg, params, create_graph=True)
             kl = torch.distributions.kl.kl_divergence(distribution, distribution_detached).mean()
             grad_kl = torch.autograd.grad(kl, params, create_graph=True)
             grad_kl = torch.cat([grad.view(-1) for grad in grad_kl])
 
-            #def HVP(v):
-            #    kl_v = torch.dot(grad_kl, v)
-            #    kl_hessian_vector = torch.autograd.grad(kl_v, params)
-            #    return torch.cat([h.view(-1) for h in kl_hessian_vector]).detach()
-
             def HVP(v):
                 kl_v = torch.dot(grad_kl, v)
-                #print(kl_v)
                 return flat_grad(kl_v, params, retain_graph=True)
             
             search_direction = conjugate_gradient(HVP, grad_loss)
-            #print(search_direction)
             max_length = torch.sqrt(2 * delta / (search_direction @ HVP(search_direction)))
             max_step = max_length * search_direction
 
@@ -124,8 +114,6 @@ class MLPPolicyPG(MLPPolicy):
                     probs_new = torch.exp(distribution_new.log_prob(actions))
                     loss_new = surrogate_loss(probs_new, probs, advantages)
                     kl_new = torch.distributions.kl.kl_divergence(distribution, distribution_new).mean()
-                #print(loss_new - loss)
-                #print(kl_new)
                 if (loss_new - loss >= 0) and (kl_new <= delta):
                     return True
 
@@ -154,10 +142,8 @@ def conjugate_gradient(A, b, delta=0., max_iters=10):
     i = 0
     while i < max_iters:
         AVP = A(p)
-        #print(AVP)
         alpha = r_dot_r / torch.dot(p, AVP)
         x_new = x + alpha*p
-        #print(x_new)
 
         if (x-x_new).norm() <= delta:
             return x_new
